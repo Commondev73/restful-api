@@ -20,8 +20,13 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 Route::post('login','Api\AuthController@login');
 
 Route::group(['middleware' => ['jwt.verify']], function () {
+
     Route::post('token/refresh','Api\AuthController@refresh');
     Route::post('logout','Api\AuthController@logout');
     Route::post('user/data','Api\AuthController@user');
+
+    Route::post('imageprofile','Api\ImageProfileController@ImageProfile');
+    Route::delete('imageprofile/delete','Api\ImageProfileController@DeleteImageProfile');
     Route::apiResource('user','Api\UsersController');
+    
 });
