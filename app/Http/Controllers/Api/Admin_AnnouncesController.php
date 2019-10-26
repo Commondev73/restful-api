@@ -74,6 +74,7 @@ class Admin_AnnouncesController extends Controller
         $announces->area = $request->area;
         $announces->price = $request->price;
         $announces->id_user = $this->id_user;
+        $announces->status = 1;
         $announces->save();
 
 
