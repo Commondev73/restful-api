@@ -17,4 +17,11 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::apiResource('user','Api\UsersController');
+Route::post('login','Api\AuthController@login');
+
+Route::group(['middleware' => ['jwt.verify']], function () {
+    Route::post('token/refresh','Api\AuthController@refresh');
+    Route::post('logout','Api\AuthController@logout');
+    Route::post('user/data','Api\AuthController@user');
+    Route::apiResource('user','Api\UsersController');
+});
