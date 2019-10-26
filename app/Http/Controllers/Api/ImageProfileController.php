@@ -22,7 +22,8 @@ class ImageProfileController extends Controller
     public function ImageProfile(Request $request)
     {
         $rules = [
-            "imageprofile" => "required|image|mimes:jpeg,png,jpg|max:2048"
+            "imageprofile" => "required",
+            "imageprofile.*"=>"image|mimes:jpeg,png,jpg,gif,svg|max:2048"
         ];
 
         $validator = Validator::make($request->only('imageprofile'), $rules);
