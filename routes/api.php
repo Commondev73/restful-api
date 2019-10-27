@@ -27,7 +27,8 @@ Route::group(['middleware' => ['jwt.verify']], function () {
 
     Route::post('imageprofile','Api\ImageProfileController@ImageProfile');
     Route::delete('imageprofile/delete','Api\ImageProfileController@DeleteImageProfile');
-    
+    Route::apiResource('announces', 'Api\AnnouncesController');
+
 });
 
 Route::group(['middleware' => ['admin']], function () {
