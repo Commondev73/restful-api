@@ -13,25 +13,26 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
-});
+// Route::middleware('auth:api')->get('/user', function (Request $request) {
+//     return $request->user();
+// });
 
 Route::post('login','Api\AuthController@login');
+Route::get('announces','Api\PublicAnnouncesController@announces');
+Route::get('announces/{id}','Api\PublicAnnouncesController@announcesByID');
 
 Route::group(['middleware' => ['jwt.verify']], function () {
 
     Route::post('token/refresh','Api\AuthController@refresh');
     Route::post('logout','Api\AuthController@logout');
+
     Route::post('user/data','Api\AuthController@user');
-
-    Route::post('imageprofile','Api\ImageProfileController@ImageProfile');
-    Route::delete('imageprofile/delete','Api\ImageProfileController@DeleteImageProfile');
-    Route::apiResource('announces', 'Api\AnnouncesController');
-
+    Route::post('user/imageprofile','Api\ImageProfileController@ImageProfile');
+    Route::delete('user/imageprofile','Api\ImageProfileController@DeleteImageProfile');
+    Route::apiResource('user/announces', 'Api\AnnouncesController');
 });
 
 Route::group(['middleware' => ['admin']], function () {
     Route::apiResource('admin/announces','Api\Admin_AnnouncesController');
-    Route::apiResource('user','Api\UsersController');
+    Route::apiResource('admin/users','Api\UsersController');
 });
