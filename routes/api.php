@@ -18,7 +18,8 @@ use Illuminate\Http\Request;
 // });
 
 Route::post('login','Api\AuthController@login');
-Route::get('announces','Api\PublicAnnouncesController@announces');
+Route::post('register','Api\RegisterController@Register');
+Route::get('announces/search/{data}','Api\PublicAnnouncesController@announces');
 Route::get('announces/{id}','Api\PublicAnnouncesController@announcesByID');
 
 Route::group(['middleware' => ['jwt.verify']], function () {
@@ -30,6 +31,7 @@ Route::group(['middleware' => ['jwt.verify']], function () {
     Route::post('user/imageprofile','Api\ImageProfileController@ImageProfile');
     Route::delete('user/imageprofile','Api\ImageProfileController@DeleteImageProfile');
     Route::apiResource('user/announces', 'Api\AnnouncesController');
+    Route::post('user/update/profile/{id}','Api\UpdateProfileController@Update');
 });
 
 Route::group(['middleware' => ['admin']], function () {
