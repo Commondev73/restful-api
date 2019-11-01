@@ -19,7 +19,8 @@ use Illuminate\Http\Request;
 
 Route::post('login','Api\AuthController@login');
 Route::post('register','Api\RegisterController@Register');
-Route::get('announces/search/{data}','Api\PublicAnnouncesController@announces');
+Route::get('announces','Api\PublicAnnouncesController@announces');
+Route::get('announces/search/{keyword?}/{atype?}/{ptype?}/{bedroom?}/{area?}/{price?}','Api\PublicAnnouncesController@search');
 Route::get('announces/{id}','Api\PublicAnnouncesController@announcesByID');
 
 Route::group(['middleware' => ['jwt.verify']], function () {
