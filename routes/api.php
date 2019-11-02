@@ -23,6 +23,11 @@ Route::get('announces','Api\PublicAnnouncesController@announces');
 Route::get('announces/search/{keyword?}/{atype?}/{ptype?}/{bedroom?}/{area?}/{price?}','Api\PublicAnnouncesController@search');
 Route::get('announces/{id}','Api\PublicAnnouncesController@announcesByID');
 
+Route::get('province','Api\DistrictsController@province');
+Route::get('amphoe/{code?}','Api\DistrictsController@amphoe');
+Route::get('district/{code?}','Api\DistrictsController@district');
+Route::get('districts/{code?}','Api\DistrictsController@districts');
+
 Route::group(['middleware' => ['jwt.verify']], function () {
 
     Route::post('token/refresh','Api\AuthController@refresh');
