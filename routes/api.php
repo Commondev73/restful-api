@@ -26,8 +26,7 @@ Route::get('announces/{id}','Api\PublicAnnouncesController@announcesByID');
 Route::get('province','Api\DistrictsController@province');
 Route::get('amphoe/{code?}','Api\DistrictsController@amphoe');
 Route::get('district/{code?}','Api\DistrictsController@district');
-
-// Route::get('districts/{code?}','Api\DistrictsController@districts');
+Route::get('districts/{code?}','Api\DistrictsController@districts');
 
 Route::group(['middleware' => ['jwt.verify']], function () {
 

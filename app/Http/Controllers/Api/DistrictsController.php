@@ -26,9 +26,9 @@ class DistrictsController extends Controller
         return response()->json($district, 200);
     }
 
-    // public function districts($code = null)
-    // {
-    //     $districts = DB::table('districts')->where('district_code',$code)->first();
-    //     return response()->jsonp($districts, 200);
-    // }
+    public function districts($code = null)
+    {
+        $district = DB::table('districts')->where('district_code',$code)->first();
+        return response()->json($district, 200);
+    }
 }
