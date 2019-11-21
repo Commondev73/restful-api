@@ -43,9 +43,9 @@ class PublicAnnouncesController extends Controller
         $announces = Announces::where(function ($query) use ($keyword,$atype,$ptype,$bedroom,$area,$price) {
             $query->where('topic', 'like', '%' . trim($keyword) . '%')
                 ->orWhere('announcer_status', 'like', '%' . trim($keyword) . '%')
-                ->orWhere('province_code', 'like', '%' . trim($keyword) . '%')
-                ->orWhere('amphoe_code', 'like', '%' . trim($keyword) . '%')
-                ->orWhere('district_code', 'like', '%' . trim($keyword) . '%')
+                ->orWhere('province_name', 'like', '%' . trim($keyword) . '%')
+                ->orWhere('amphoe_name', 'like', '%' . trim($keyword) . '%')
+                ->orWhere('district_name', 'like', '%' . trim($keyword) . '%')
                 ->orWhere('detail', 'like', '%' . trim($keyword) . '%');
                 if(!is_null($atype))$query->orWhere('announcement_type', 'like', '%' . trim($atype) . '%');
                 if(!is_null($ptype))$query->orWhere('Property_type', 'like', '%' . trim($ptype) . '%');
