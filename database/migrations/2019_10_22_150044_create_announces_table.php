@@ -18,6 +18,9 @@ class CreateAnnouncesTable extends Migration
             $table->string('announcer_status');
             $table->string('announcement_type');
             $table->string('Property_type');
+            $table->string('province_name');
+            $table->string('amphoe_name');
+            $table->string('district_name');
             $table->integer('province_code');
             $table->integer('amphoe_code');
             $table->integer('district_code');

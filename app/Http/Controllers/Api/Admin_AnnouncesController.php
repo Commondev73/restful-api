@@ -24,7 +24,12 @@ class Admin_AnnouncesController extends Controller
     {
         $announces = Announces::all();
         foreach ($announces as $data) {
-            $data->image =  Image_announces::where('announcement_id', $data->id)->get();
+            $getImage = Image_announces::where('announcement_id', $data->id)->get();
+            foreach ($getImage as $dataImage) {
+                $dataImage->image_name = url("/image/{$dataImage->image_name}");
+            }
+            $data->price = number_format($data->price);
+            $data->image =  $getImage;
         }
         return response()->json($announces, 200);
     }
@@ -40,6 +45,9 @@ class Admin_AnnouncesController extends Controller
             "announcer_status" => "required",
             "announcement_type" => "required",
             "Property_type" => "required",
+            "province_name" => "required",
+            "amphoe_name" => "required",
+            "district_name" => "required",
             "province_code" => "required",
             "amphoe_code" => "required",
             "district_code" => "required",
@@ -51,7 +59,7 @@ class Admin_AnnouncesController extends Controller
             "area" => "required",
             "price" => "required",
             "image" => "required",
-            "image.*"=>"image|mimes:jpeg,png,jpg,gif,svg|max:2048"
+            "image.*" => "image|mimes:jpeg,png,jpg,gif,svg|max:2048"
         ];
 
         $validator = Validator::make($request->all(), $rules);
@@ -63,6 +71,9 @@ class Admin_AnnouncesController extends Controller
         $announces->announcer_status = $request->announcer_status;
         $announces->announcement_type = $request->announcement_type;
         $announces->Property_type = $request->Property_type;
+        $announces->province_name = $request->province_name;
+        $announces->amphoe_name = $request->amphoe_name;
+        $announces->district_name = $request->district_name;
         $announces->province_code = $request->province_code;
         $announces->amphoe_code = $request->amphoe_code;
         $announces->district_code = $request->district_code;
@@ -92,7 +103,12 @@ class Admin_AnnouncesController extends Controller
         }
 
         $announces_id = Announces::find($announces->id);
-        $announces_id->image = Image_announces::where('announcement_id', $announces->id)->get();
+        $getImage = Image_announces::where('announcement_id', $announces->id)->get();
+        foreach ($getImage as $dataImage) {
+            $dataImage->image_name = url("/image/{$dataImage->image_name}");
+        }
+        $announces_id->price = number_format($announces_id->price);
+        $announces_id->image = $getImage;
         return response()->json($announces_id, 201);
     }
 
@@ -102,7 +118,12 @@ class Admin_AnnouncesController extends Controller
         if (is_null($announces)) {
             return response()->json(["message" => "Record not found"], 404);
         }
-        $announces->image = Image_announces::where('announcement_id', $id)->get();
+        $getImage = Image_announces::where('announcement_id', $id)->get();
+        foreach ($getImage as $dataImage) {
+            $dataImage->image_name = url("/image/{$dataImage->image_name}");
+        }
+        $announces->price = number_format($announces->price);
+        $announces->image = $getImage;
         return response()->json($announces, 200);
     }
 
@@ -117,6 +138,9 @@ class Admin_AnnouncesController extends Controller
             "announcer_status" => "required",
             "announcement_type" => "required",
             "Property_type" => "required",
+            "province_name" => "required",
+            "amphoe_name" => "required",
+            "district_name" => "required",
             "province_code" => "required",
             "amphoe_code" => "required",
             "district_code" => "required",
@@ -144,7 +168,7 @@ class Admin_AnnouncesController extends Controller
 
             $request->validate([
                 "image" => "required",
-                "image.*"=>"image|mimes:jpeg,png,jpg,gif,svg|max:2048"
+                "image.*" => "image|mimes:jpeg,png,jpg,gif,svg|max:2048"
             ]);
 
             $image = $request->file('image');
@@ -158,8 +182,12 @@ class Admin_AnnouncesController extends Controller
                 $announces_img->save();
             }
         }
-
-        $announces->image = Image_announces::where('announcement_id', $id)->get();
+        $getImage = Image_announces::where('announcement_id', $id)->get();
+        foreach ($getImage as $dataImage) {
+            $dataImage->image_name = url("/image/{$dataImage->image_name}");
+        }
+        $announces->price = number_format($announces->price);
+        $announces->image = $getImage;
         return response()->json($announces, 200);
     }
 
