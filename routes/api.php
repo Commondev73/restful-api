@@ -38,6 +38,7 @@ Route::group(['middleware' => ['jwt.verify']], function () {
     Route::delete('user/imageprofile','Api\ImageProfileController@DeleteImageProfile');
     Route::apiResource('user/announces', 'Api\AnnouncesController');
     Route::post('user/update/profile/{id}','Api\UpdateProfileController@Update');
+    Route::apiResource('bookmark','Api\BookmarkController');
     
     Route::post('resetpassword','Api\ResetPasswordController@ResetPassword');
 });

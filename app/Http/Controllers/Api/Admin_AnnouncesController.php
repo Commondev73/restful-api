@@ -40,6 +40,9 @@ class Admin_AnnouncesController extends Controller
             "announcer_status" => "required",
             "announcement_type" => "required",
             "Property_type" => "required",
+            "province_name" => "required",
+            "amphoe_name" => "required",
+            "district_name" => "required",
             "province_code" => "required",
             "amphoe_code" => "required",
             "district_code" => "required",
@@ -63,6 +66,9 @@ class Admin_AnnouncesController extends Controller
         $announces->announcer_status = $request->announcer_status;
         $announces->announcement_type = $request->announcement_type;
         $announces->Property_type = $request->Property_type;
+        $announces->province_name = $request->province_name;
+        $announces->amphoe_name = $request->amphoe_name;
+        $announces->district_name = $request->district_name;
         $announces->province_code = $request->province_code;
         $announces->amphoe_code = $request->amphoe_code;
         $announces->district_code = $request->district_code;
@@ -117,6 +123,9 @@ class Admin_AnnouncesController extends Controller
             "announcer_status" => "required",
             "announcement_type" => "required",
             "Property_type" => "required",
+            "province_name" => "required",
+            "amphoe_name" => "required",
+            "district_name" => "required",
             "province_code" => "required",
             "amphoe_code" => "required",
             "district_code" => "required",
