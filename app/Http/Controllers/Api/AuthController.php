@@ -28,6 +28,9 @@ class AuthController extends Controller
     public function user()
     {
         $user = auth()->user();
+        if(!is_null($user->image)){
+            $user->image = url("/image/{$user->image}");
+        }
         return response()->json($user);
     }
     public function refresh()

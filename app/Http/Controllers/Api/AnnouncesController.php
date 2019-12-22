@@ -24,7 +24,12 @@ class AnnouncesController extends Controller
     {
         $announces = Announces::where('id_user', $this->id_user)->get();
         foreach ($announces as $data) {
-            $data->image =  Image_announces::where('announcement_id', $data->id)->get();
+            $getImage = Image_announces::where('announcement_id', $data->id)->get();
+            foreach ($getImage as $dataImage) {
+                $dataImage->image_name = url("/image/{$dataImage->image_name}");
+            }
+            $data->price = number_format($data->price);
+            $data->image = $getImage;
         }
         return response()->json($announces, 200);
     }
@@ -98,7 +103,12 @@ class AnnouncesController extends Controller
         }
 
         $announces_id = Announces::find($announces->id);
-        $announces_id->image = Image_announces::where('announcement_id', $announces->id)->get();
+        $getImage = Image_announces::where('announcement_id', $announces->id)->get();
+        foreach($getImage as $dataImage){
+            $dataImage->image_name = url("/image/{$dataImage->image_name}");
+        }
+        $announces_id->price = number_format($announces_id->price);
+        $announces_id->image = $getImage;
         return response()->json($announces_id, 201);
     }
 
@@ -106,7 +116,12 @@ class AnnouncesController extends Controller
     {
         $announces = Announces::find($id);
         if ($announces->id_user == $this->id_user) {
-            $announces->image = Image_announces::where('announcement_id', $announces->id)->get();
+            $getImage = Image_announces::where('announcement_id', $announces->id)->get();
+            foreach($getImage as $dataImage){
+                $dataImage->image_name = url("/image/{$dataImage->image_name}");
+            }
+            $announces->price = number_format($announces->price);
+            $announces->image = $getImage;
             return response()->json($announces, 200);
         }
         return response()->json(["message" => "Record not found"], 404);
@@ -168,8 +183,12 @@ class AnnouncesController extends Controller
                     $announces_img->save();
                 }
             }
-
-            $announces->image = Image_announces::where('announcement_id', $id)->get();
+            $getImage = Image_announces::where('announcement_id', $id)->get();
+            foreach($getImage as $dataImage){
+                $dataImage->image_name = url("/image/{$dataImage->image_name}");
+            }
+            $announces->price = number_format($announces->price);
+            $announces->image = $getImage;
             return response()->json($announces, 200);
         }
         return response()->json(["message" => "Record not found"], 404);

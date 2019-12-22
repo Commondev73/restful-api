@@ -38,7 +38,12 @@ class BookmarkController extends Controller
         }
         $announces = Announces::find($id);
         foreach ($announces as $data) {
-            $data->image =  Image_announces::where('announcement_id', $data->id)->get();
+            $getImage = Image_announces::where('announcement_id', $data->id)->get();
+            foreach($getImage as $dataImage){
+                $dataImage->image_name = url("/image/{$dataImage->image_name}");
+            }
+            $data->price = number_format($data->price);
+            $data->image =  $getImage;
         }
         return response()->json($announces, 200);
     }
