@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Announces;
 use App\Models\Image_announces;
+use App\Models\Users;
 
 class PublicAnnouncesController extends Controller
 {
@@ -26,13 +27,23 @@ class PublicAnnouncesController extends Controller
     public function announcesByID($id)
     {
         $announces = Announces::find($id);
+        if (is_null($announces)) {
+            return response()->json(["message" => "Record not found"], 404);
+        }
         if ($announces->status == 1) {
             $getImage = Image_announces::where('announcement_id', $announces->id)->get();
+            $getUser = Users::find($announces->id_user);
             foreach ($getImage as $dataImage) {
                 $dataImage->image_name = url("/image/{$dataImage->image_name}");
             }
             $announces->price = number_format($announces->price);
             $announces->image = $getImage;
+            $announces->user = [
+                "first_name" => $getUser->first_name,
+                "phone" => $getUser->phone,
+                "line" => $getUser->line,
+                "email" => $getUser->email,
+            ];
             return response()->json($announces, 200);
         }
         return response()->json(["message" => "Record not found"], 404);
