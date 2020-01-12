@@ -19,9 +19,11 @@ use Illuminate\Http\Request;
 
 Route::post('login','Api\AuthController@login');
 Route::post('register','Api\RegisterController@Register');
+Route::post('validation-email','Api\RegisterController@ValidationEmail');
 Route::get('announces','Api\PublicAnnouncesController@announces');
 Route::get('announces/search/{keyword?}/{atype?}/{ptype?}/{bedroom?}/{area?}/{price?}','Api\PublicAnnouncesController@search');
 Route::get('announces/{id}','Api\PublicAnnouncesController@announcesByID');
+
 
 Route::get('province','Api\DistrictsController@province');
 Route::get('amphoe/{code?}','Api\DistrictsController@amphoe');
