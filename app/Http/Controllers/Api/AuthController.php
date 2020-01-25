@@ -28,11 +28,22 @@ class AuthController extends Controller
     public function user()
     {
         $user = auth()->user();
-        if(!is_null($user->image)){
-            $user->image = url("/image/{$user->image}");
-        }
-        return response()->json($user);
+        $data = [
+            "id" =>  auth()->user()->id,
+            "first_name" =>  auth()->user()->first_name,
+            "last_name" =>  auth()->user()->last_name,
+            "phone" =>  auth()->user()->phone,
+            "line" =>  auth()->user()->line,
+            "email" =>  auth()->user()->email,
+            "image" => !is_null($user->image) ? url("/image/{$user->image}") : $user->image,
+        ];
+
+        // if (!is_null($user->image)) {
+        //     $user->image = url("/image/{$user->image}");
+        // }
+        return response()->json($data);
     }
+
     public function refresh()
     {
         return $this->respondWithToken(auth()->refresh());
