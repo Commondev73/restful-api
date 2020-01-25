@@ -9,7 +9,7 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
 class Users extends Authenticatable implements JWTSubject
 {
     protected $table = "users";
-    protected $fillable = ['first_name','last_name','phone','line','email','password','image'];
+    protected $fillable = ['first_name', 'last_name', 'phone', 'line', 'email', 'password', 'image'];
 
     public function announces()
     {
@@ -23,6 +23,12 @@ class Users extends Authenticatable implements JWTSubject
 
     public function getJWTCustomClaims()
     {
-        return [];
+        return [
+            'id' => $this->id,
+            'email' => $this->email,
+            'first_name' => $this->first_name,
+            'image' => $this->image,
+            'role' => $this->role,
+        ];
     }
 }
