@@ -10,14 +10,15 @@ use Illuminate\Support\Facades\Validator;
 
 class UpdateProfileController extends Controller
 {
-    public function Update(Request $request,$id)
+    public function Update(Request $request)
     {
-        $user = Users::find($id);
+        $user = Users::find(auth()->user()->id);
         $rules = [
             'first_name' => 'required|min:3',
             'last_name' => 'required|min:3',
             'phone' => 'required|min:10|max:10',
             'line' => 'required',
+            'email' => 'required|string|email|max:191|unique:users,email,' . auth()->user()->id . ''
         ];
 
         $validator = Validator::make($request->all(), $rules);
@@ -25,17 +26,24 @@ class UpdateProfileController extends Controller
             return response()->json($validator->errors(), 400);
         }
 
-        if($id == auth()->user()->id)
-        {
-            $input = $request->only([
-                'first_name',
-                'last_name',
-                'phone',
-                'line',
-            ]);
-            $user->update($input);
-            return response()->json($user, 200);
-        }
-        return response()->json(["message" => "Record not found"], 404);
+        $input = $request->only([
+            'first_name',
+            'last_name',
+            'phone',
+            'line',
+            'email'
+        ]);
+        $user->update($input);
+
+        $data = [
+            "id" =>  $user->id,
+            "first_name" =>  $user->first_name,
+            "last_name" =>  $user->last_name,
+            "phone" =>  $user->phone,
+            "line" =>  $user->line,
+            "email" =>  $user->email,
+            "image" => !is_null($user->image) ? url("/image/{$user->image}") : $user->image,
+        ];
+        return response()->json($data, 200);
     }
 }
