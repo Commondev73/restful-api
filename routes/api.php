@@ -30,9 +30,10 @@ Route::get('amphoe/{code?}','Api\DistrictsController@amphoe');
 Route::get('district/{code?}','Api\DistrictsController@district');
 Route::get('districts/{code?}','Api\DistrictsController@districts');
 
+Route::post('token/refresh','Api\AuthController@refresh');
+
 Route::group(['middleware' => ['jwt.verify']], function () {
 
-    Route::post('token/refresh','Api\AuthController@refresh');
     Route::post('logout','Api\AuthController@logout');
 
     Route::post('user/data','Api\AuthController@user');

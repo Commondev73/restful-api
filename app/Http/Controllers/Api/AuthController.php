@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Exception;
@@ -44,9 +45,19 @@ class AuthController extends Controller
         return response()->json($data);
     }
 
-    public function refresh()
+    public function refresh(Request $request)
     {
-        return $this->respondWithToken(auth()->refresh());
+        $rule = ['token' => 'required'];
+        $validator = Validator::make($request->only('token'), $rule);
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 400);
+        }
+        $request->headers->set('Authorization', 'Bearer '. $request->token);
+        try{
+            return $this->respondWithToken(auth()->refresh());
+        }catch (Exception $e){
+            return response()->json($e->getMessage(),401);
+        }
     }
 
     protected function respondWithToken($token)
