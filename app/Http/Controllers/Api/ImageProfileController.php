@@ -12,13 +12,6 @@ use File;
 
 class ImageProfileController extends Controller
 {
-    protected $id;
-
-    public function __construct()
-    {
-        $this->id_user = auth()->user()->id;
-    }
-
     public function ImageProfile(Request $request)
     {
         $rules = [
@@ -32,11 +25,11 @@ class ImageProfileController extends Controller
         }
 
         $imageprofile = $request->file('imageprofile');
-        $new_name = $this->id_user . '-' . rand() . '.' . $imageprofile->getClientOriginalExtension();
+        $new_name = auth()->user()->id . '-' . rand() . '.' . $imageprofile->getClientOriginalExtension();
         $destinationPath = 'image/';
         $imageprofile->move($destinationPath, $new_name);
 
-        $user = Users::find($this->id_user);
+        $user = Users::find(auth()->user()->id);
         if (File::exists(public_path('image/' . $user->image))) {
             File::delete(public_path('image/' . $user->image));
         }
