@@ -13,16 +13,9 @@ use File;
 
 class AnnouncesController extends Controller
 {
-    protected $id_user;
-
-    public function __construct()
-    {
-        $this->id_user = auth()->user()->id;
-    }
-
     public function index()
     {
-        $announces = Announces::where('id_user', $this->id_user)->get();
+        $announces = Announces::where('id_user', auth()->user()->id)->get();
         foreach ($announces as $data) {
             $getImage = Image_announces::where('announcement_id', $data->id)->get();
             foreach ($getImage as $dataImage) {
@@ -84,7 +77,7 @@ class AnnouncesController extends Controller
         $announces->floor = $request->floor;
         $announces->area = $request->area;
         $announces->price = $request->price;
-        $announces->id_user = $this->id_user;
+        $announces->id_user = auth()->user()->id;
         $announces->status = 1;
         $announces->save();
 
@@ -104,7 +97,7 @@ class AnnouncesController extends Controller
 
         $announces_id = Announces::find($announces->id);
         $getImage = Image_announces::where('announcement_id', $announces->id)->get();
-        foreach($getImage as $dataImage){
+        foreach ($getImage as $dataImage) {
             $dataImage->image_name = url("/image/{$dataImage->image_name}");
         }
         $announces_id->price = number_format($announces_id->price);
@@ -115,9 +108,9 @@ class AnnouncesController extends Controller
     public function show($id)
     {
         $announces = Announces::find($id);
-        if ($announces->id_user == $this->id_user) {
+        if ($announces->id_user == auth()->user()->id) {
             $getImage = Image_announces::where('announcement_id', $announces->id)->get();
-            foreach($getImage as $dataImage){
+            foreach ($getImage as $dataImage) {
                 $dataImage->image_name = url("/image/{$dataImage->image_name}");
             }
             $announces->price = number_format($announces->price);
@@ -161,10 +154,10 @@ class AnnouncesController extends Controller
         }
 
         $announces = Announces::find($id);
-        if ($announces->id_user == $this->id_user) {
+        if ($announces->id_user == auth()->user()->id) {
 
             $announces->update($request->all());
-            
+
             if ($request->hasFile('image')) {
 
                 $request->validate([
@@ -184,7 +177,7 @@ class AnnouncesController extends Controller
                 }
             }
             $getImage = Image_announces::where('announcement_id', $id)->get();
-            foreach($getImage as $dataImage){
+            foreach ($getImage as $dataImage) {
                 $dataImage->image_name = url("/image/{$dataImage->image_name}");
             }
             $announces->price = number_format($announces->price);
@@ -197,7 +190,7 @@ class AnnouncesController extends Controller
     public function destroy($id)
     {
         $announces = Announces::find($id);
-        if ($announces->id_user == $this->id_user) {
+        if ($announces->id_user == auth()->user()->id) {
             $announces->status = 2;
             $announces->update();
             return response()->json(["message" => "Delete success"], 204);

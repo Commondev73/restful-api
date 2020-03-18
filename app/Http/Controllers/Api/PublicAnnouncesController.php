@@ -43,6 +43,7 @@ class PublicAnnouncesController extends Controller
                 "phone" => $getUser->phone,
                 "line" => $getUser->line,
                 "email" => $getUser->email,
+                "image"=> !is_null($getUser->image) ? url("/image/{$getUser->image}") : $getUser->image,
             ];
             return response()->json($announces, 200);
         }
