@@ -15,7 +15,7 @@ class AnnouncesController extends Controller
 {
     public function index()
     {
-        $announces = Announces::where('id_user', auth()->user()->id)->get();
+        $announces = Announces::where('id_user', auth()->user()->id)->paginate(10);
         foreach ($announces as $data) {
             $getImage = Image_announces::where('announcement_id', $data->id)->get();
             foreach ($getImage as $dataImage) {
@@ -52,7 +52,8 @@ class AnnouncesController extends Controller
             "area" => "required",
             "price" => "required",
             "image" => "required",
-            "image.*" => "image|mimes:jpeg,png,jpg,gif,svg|max:2048"
+            "image.*" => "image|mimes:jpeg,png,jpg,gif,svg|max:2048",
+            "status" => "required"
         ];
 
         $validator = Validator::make($request->all(), $rules);
@@ -78,7 +79,7 @@ class AnnouncesController extends Controller
         $announces->area = $request->area;
         $announces->price = $request->price;
         $announces->id_user = auth()->user()->id;
-        $announces->status = 1;
+        $announces->status = $request->status;
         $announces->save();
 
 
@@ -144,8 +145,7 @@ class AnnouncesController extends Controller
             "floor" => "required",
             "area" => "required",
             "price" => "required",
-            "image" => "required",
-            "image.*" => "image|mimes:jpeg,png,jpg,gif,svg|max:2048"
+            "status" => "required"
         ];
 
         $validator = Validator::make($request->all(), $rules);
@@ -176,6 +176,17 @@ class AnnouncesController extends Controller
                     $announces_img->save();
                 }
             }
+
+            if ($request->has('delete_image')) {
+                $delete_image = Image_announces::whereIn('id', $request->delete_image);
+                foreach ($delete_image->get() as $Image) {
+                    if (File::exists(public_path('image/' . $Image->image_name))) {
+                        File::delete(public_path('image/' . $Image->image_name));
+                    }
+                }
+                $delete_image->delete();
+            }
+            
             $getImage = Image_announces::where('announcement_id', $id)->get();
             foreach ($getImage as $dataImage) {
                 $dataImage->image_name = url("/image/{$dataImage->image_name}");
@@ -191,9 +202,14 @@ class AnnouncesController extends Controller
     {
         $announces = Announces::find($id);
         if ($announces->id_user == auth()->user()->id) {
-            $announces->status = 2;
-            $announces->update();
-            return response()->json(["message" => "Delete success"], 204);
+            $images = Image_announces::where('announcement_id', $id)->get();
+            foreach ($images as $image) {
+                if (File::exists(public_path('image/' . $image->image_name))) {
+                    File::delete(public_path('image/' . $image->image_name));
+                }
+            }
+            $announces->delete();
+            return response()->json(null, 204);
         }
         return response()->json(["message" => "Record not found"], 404);
     }

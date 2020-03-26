@@ -12,7 +12,7 @@ class PublicAnnouncesController extends Controller
 {
     public function announces()
     {
-        $announces = Announces::where('status', 1)->get();
+        $announces = Announces::where('status', 1)->paginate(48);
         foreach ($announces as $data) {
             $getImage = Image_announces::where('announcement_id', $data->id)->get();
             foreach ($getImage as $dataImage) {
@@ -43,14 +43,14 @@ class PublicAnnouncesController extends Controller
                 "phone" => $getUser->phone,
                 "line" => $getUser->line,
                 "email" => $getUser->email,
-                "image"=> !is_null($getUser->image) ? url("/image/{$getUser->image}") : $getUser->image,
+                "image" => !is_null($getUser->image) ? url("/image/{$getUser->image}") : $getUser->image,
             ];
             return response()->json($announces, 200);
         }
         return response()->json(["message" => "Record not found"], 404);
     }
 
-    public function search($keyword = null, $atype = null, $ptype = null, $bedroom = null, $area = null, $price = null)
+    public function search($keyword = null, $atype = null, $ptype = null, $bedroom = null, $toilet = null, $price = null, $toprice = null)
     {
         // SELECT * FROM `announces` WHERE (`topic`LIKE'%bbb%' 
         // OR `announcement_type`LIKE'%bbb%' 
@@ -62,7 +62,7 @@ class PublicAnnouncesController extends Controller
         // OR `detail`LIKE '%bbb%'
         // OR `price`LIKE'%bbb%') AND (`status` = 1)
 
-        $announces = Announces::where(function ($query) use ($keyword, $atype, $ptype, $bedroom, $area, $price) {
+        $announces = Announces::where(function ($query) use ($keyword, $atype, $ptype, $bedroom, $toilet, $price, $toprice) {
             $query->where('topic', 'like', '%' . trim($keyword) . '%')
                 ->orWhere('announcer_status', 'like', '%' . trim($keyword) . '%')
                 ->orWhere('province_name', 'like', '%' . trim($keyword) . '%')
@@ -71,12 +71,14 @@ class PublicAnnouncesController extends Controller
                 ->orWhere('detail', 'like', '%' . trim($keyword) . '%');
             if (!is_null($atype)) $query->orWhere('announcement_type', 'like', '%' . trim($atype) . '%');
             if (!is_null($ptype)) $query->orWhere('Property_type', 'like', '%' . trim($ptype) . '%');
-            if (!is_null($bedroom)) $query->orWhere('bedroom', 'like', '%' . trim($bedroom) . '%');
-            if (!is_null($area)) $query->orWhere('area', 'like', '%' . trim($area) . '%');
-            if (!is_null($price)) $query->orWhere('price', 'like', '%' . trim($price) . '%');
+            if (!is_null($bedroom)) $query->orWhere('bedroom', (trim($bedroom) == 5 ? '>=' : '='), trim($bedroom));
+            if (!is_null($bedroom)) $query->orWhere('toilet', (trim($toilet) == 5 ? '>=' : '='), trim($toilet));
+            // if (!is_null($area)) $query->orWhere('area', 'like', '%' . trim($area) . '%');
+            // if (!is_null($price)) $query->orWhere('price', 'like', '%' . trim($price) . '%');
+            if (!is_null($price) && !is_null($toprice)) $query->orWhereBetween('price', [trim($price), trim($toprice)]);
         })->where(function ($query) {
             $query->where('status', 1);
-        })->get();
+        })->paginate(48);
 
         foreach ($announces as $data) {
             $getImage = Image_announces::where('announcement_id', $data->id)->get();
