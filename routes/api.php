@@ -42,7 +42,7 @@ Route::group(['middleware' => ['jwt.verify']], function () {
     Route::delete('user/imageprofile', 'Api\ImageProfileController@DeleteImageProfile');
     Route::apiResource('user/announces', 'Api\AnnouncesController');
 
-    Route::get('user/announces/count', 'Api\StatusAnnouncesController@announcesCount');
+    Route::get('user/count/announces', 'Api\StatusAnnouncesController@announcesCount');
     Route::get('user/online/announces', 'Api\StatusAnnouncesController@online');
     Route::get('user/draft/announces', 'Api\StatusAnnouncesController@draft');
     Route::get('user/correct/announces', 'Api\StatusAnnouncesController@correct');
@@ -51,7 +51,7 @@ Route::group(['middleware' => ['jwt.verify']], function () {
     Route::post('user/update/profile', 'Api\UpdateProfileController@Update');
 
     Route::apiResource('mail', 'Api\MailController');
-    Route::get('mail/count','Api\MailReadStatusController@mailCount');
+    Route::get('count/mail','Api\MailReadStatusController@mailCount');
     Route::patch('mail/read/{id}', 'Api\MailReadStatusController@read');
     Route::patch('mail/unread/{id}', 'Api\MailReadStatusController@unread');
     Route::patch('mail/save/{id}', 'Api\MailReadStatusController@save');
