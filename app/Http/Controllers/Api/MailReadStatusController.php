@@ -54,8 +54,8 @@ class MailReadStatusController extends Controller
   {
     $mail = Mail::where('id_user', auth()->user()->id)->get()->toArray();
     $result = [
-      'unread' => $this->find_children($mail, 'reading_status', 0),
-      'read' => $this->find_children($mail, 'reading_status', 1),
+      'unread' => $this->find_children($mail, 'reading_status', 1),
+      'read' => $this->find_children($mail, 'reading_status', 0),
       'save' => $this->find_children($mail, 'reading_status', 2)
     ];
     return response()->json($result, 200);

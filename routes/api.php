@@ -31,7 +31,7 @@ Route::get('amphoe/{code?}', 'Api\DistrictsController@amphoe');
 Route::get('district/{code?}', 'Api\DistrictsController@district');
 Route::get('districts/{code?}', 'Api\DistrictsController@districts');
 
-Route::post('token/refresh', 'Api\AuthController@refresh');
+Route::post('token/refresh', 'Api\AuthController@refresh');  
 
 Route::group(['middleware' => ['jwt.verify']], function () {
 
@@ -51,6 +51,9 @@ Route::group(['middleware' => ['jwt.verify']], function () {
     Route::post('user/update/profile', 'Api\UpdateProfileController@Update');
 
     Route::apiResource('mail', 'Api\MailController');
+    Route::get('user/read/mail', 'Api\StatusMailController@read');
+    Route::get('user/unread/mail', 'Api\StatusMailController@unread');
+    Route::get('user/save/mail', 'Api\StatusMailController@save');  
     Route::get('count/mail','Api\MailReadStatusController@mailCount');
     Route::patch('mail/read/{id}', 'Api\MailReadStatusController@read');
     Route::patch('mail/unread/{id}', 'Api\MailReadStatusController@unread');
