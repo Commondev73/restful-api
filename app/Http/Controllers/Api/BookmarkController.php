@@ -20,10 +20,10 @@ class BookmarkController extends Controller
         foreach ($bookmark as $dataID) {
             $id[] = $dataID->id_announces;
         }
-        $announces = Announces::where('id',$id)->paginate(48);
+        $announces = Announces::whereIn('id', $id)->paginate(28);
         foreach ($announces as $data) {
             $getImage = Image_announces::where('announcement_id', $data->id)->get();
-            foreach($getImage as $dataImage){
+            foreach ($getImage as $dataImage) {
                 $dataImage->image_name = url("/image/{$dataImage->image_name}");
             }
             $data->price = number_format($data->price);
@@ -76,11 +76,19 @@ class BookmarkController extends Controller
         //
     }
 
-
     public function destroy($id)
     {
         $bookmark = Bookmark::where('id_user', auth()->user()->id)
             ->where('id_announces', $id)->delete();
         return response()->json(null, 204);
+    }
+
+    public function getId()
+    {
+        $bookmark = Bookmark::where('id_user', auth()->user()->id)->get();
+        foreach ($bookmark as $dataID) {
+            $id[] = $dataID->id_announces;
+        }
+        return response()->json($id, 200);
     }
 }

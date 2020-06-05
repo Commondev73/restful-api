@@ -48,6 +48,7 @@ Route::group(['middleware' => ['jwt.verify']], function () {
     Route::get('user/correct/announces', 'Api\StatusAnnouncesController@correct');
 
     Route::apiResource('bookmark', 'Api\BookmarkController');
+    Route::get('user/bookmark', 'Api\BookmarkController@getId');
     Route::post('user/update/profile', 'Api\UpdateProfileController@Update');
 
     Route::apiResource('mail', 'Api\MailController');
