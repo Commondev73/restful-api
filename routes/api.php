@@ -23,7 +23,7 @@ Route::post('mail/message', 'Api\MailController@store');
 
 Route::post('validation-email', 'Api\RegisterController@ValidationEmail');
 Route::get('announces', 'Api\PublicAnnouncesController@announces');
-Route::get('announces/search/{keyword?}/{atype?}/{ptype?}/{bedroom?}/{toilet?}/{price?}/{toprice?}', 'Api\PublicAnnouncesController@search');
+Route::post('announces/search', 'Api\PublicAnnouncesController@search');
 Route::get('announces/{id}', 'Api\PublicAnnouncesController@announcesByID');
 
 Route::get('province', 'Api\DistrictsController@province');
@@ -41,6 +41,7 @@ Route::group(['middleware' => ['jwt.verify']], function () {
     Route::post('user/imageprofile', 'Api\ImageProfileController@ImageProfile');
     Route::delete('user/imageprofile', 'Api\ImageProfileController@DeleteImageProfile');
     Route::apiResource('user/announces', 'Api\AnnouncesController');
+    Route::post('user/announces/search', 'Api\AnnouncesController@search');
 
     Route::get('user/count/announces', 'Api\StatusAnnouncesController@announcesCount');
     Route::get('user/online/announces', 'Api\StatusAnnouncesController@online');
@@ -52,6 +53,7 @@ Route::group(['middleware' => ['jwt.verify']], function () {
     Route::post('user/update/profile', 'Api\UpdateProfileController@Update');
 
     Route::apiResource('mail', 'Api\MailController');
+    Route::post('mail/search', 'Api\MailController@search');
     Route::get('user/read/mail', 'Api\StatusMailController@read');
     Route::get('user/unread/mail', 'Api\StatusMailController@unread');
     Route::get('user/save/mail', 'Api\StatusMailController@save');  
