@@ -12,7 +12,7 @@ class StatusMailController extends Controller
 {
   protected function status($value)
   {
-    $Mail = Mail::where('id_user', auth()->user()->id)->where('reading_status', $value)->paginate(30);
+    $Mail = Mail::where('id_user', auth()->user()->id)->where('reading_status', $value)->orderBy('created_at', 'desc')->paginate(30);
     return response()->json($Mail, 200);
   }
 

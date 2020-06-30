@@ -15,7 +15,7 @@ class AnnouncesController extends Controller
 {
   public function index()
   {
-    $announces = Announces::where('id_user', auth()->user()->id)->paginate(10);
+    $announces = Announces::where('id_user', auth()->user()->id)->orderBy('created_at', 'desc')->paginate(10);
     foreach ($announces as $data) {
       $getImage = Image_announces::where('announcement_id', $data->id)->get();
       foreach ($getImage as $dataImage) {
@@ -216,7 +216,7 @@ class AnnouncesController extends Controller
 
   public function search(Request $request)
   {
-    $announces = Announces::where('id_user', auth()->user()->id);
+    $announces = Announces::where('id_user', auth()->user()->id)->orderBy('created_at', 'desc');
 
     if ($request->has('atype')) $announces->where('announcement_type', $request->atype);
 

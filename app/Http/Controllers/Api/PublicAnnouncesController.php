@@ -13,7 +13,7 @@ class PublicAnnouncesController extends Controller
 {
   public function announces()
   {
-    $announces = Announces::where('status', 1)->paginate(48);
+    $announces = Announces::where('status', 1)->orderBy('created_at', 'desc')->paginate(28);
     foreach ($announces as $data) {
       $getImage = Image_announces::where('announcement_id', $data->id)->get();
       foreach ($getImage as $dataImage) {
@@ -53,7 +53,7 @@ class PublicAnnouncesController extends Controller
 
   public function search(Request $request)
   {
-    $announces = Announces::where('status', 1);
+    $announces = Announces::where('status', 1)->orderBy('created_at', 'desc');
 
     if ($request->has('atype')) $announces->where('announcement_type', $request->atype);
 

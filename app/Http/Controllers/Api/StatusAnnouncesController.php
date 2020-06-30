@@ -25,7 +25,7 @@ class StatusAnnouncesController extends Controller
 
     protected function status($value)
     {
-        $announces = Announces::where('id_user', auth()->user()->id)->where('status', $value)->paginate(20);
+        $announces = Announces::where('id_user', auth()->user()->id)->where('status', $value)->orderBy('created_at', 'desc')->paginate(20);
         foreach ($announces as $data) {
             $getImage = Image_announces::where('announcement_id', $data->id)->get();
             foreach ($getImage as $dataImage) {

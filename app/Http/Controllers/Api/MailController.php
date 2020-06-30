@@ -17,7 +17,7 @@ class MailController extends Controller
    */
   public function index()
   {
-    $mail = Mail::select('id', 'email', 'message', 'reading_status', 'created_at')->where('id_user', auth()->user()->id)->paginate(30);
+    $mail = Mail::select('id', 'email', 'message', 'reading_status', 'created_at')->where('id_user', auth()->user()->id)->orderBy('created_at', 'desc')->paginate(30);
     return response()->json($mail, 200);
   }
 
@@ -119,7 +119,7 @@ class MailController extends Controller
 
   public function search(Request $request)
   {
-    $mail = Mail::select('id', 'name', 'email', 'message', 'reading_status', 'created_at')->where('id_user', auth()->user()->id);
+    $mail = Mail::select('id', 'name', 'email', 'message', 'reading_status', 'created_at')->where('id_user', auth()->user()->id)->orderBy('created_at', 'desc');
 
     if ($request->has('date') && $request->has('todate')) $mail->whereBetween('created_at', [trim($request->date), trim($request->todate)]);
 
