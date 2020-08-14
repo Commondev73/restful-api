@@ -31,6 +31,6 @@ class ResetPasswordController extends Controller
             $user->update();
             return response()->json($user, 200);
         }
-        return response()->json(["message"=>"Password is incorrect"], 401);
+        return response()->json(["message"=>"Password is incorrect"], 400);
     }
 }

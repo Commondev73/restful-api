@@ -14,36 +14,22 @@ use Exception;
 
 class BookmarkController extends Controller
 {
-    protected $id_user;
-
-    public function __construct()
-    {
-        $this->id_user = auth()->user()->id;
-    }
-
-    // public function index(PublicAnnouncesController $Announces)
-    // {
-    //     $bookmark = Bookmark::where('id_user', $this->id_user)->get();
-    //     foreach($bookmark as $data){
-    //         $list[] = $Announces->announcesByID($data->id_announces);
-    //     }
-    //     return response()->json($list, 200);
-    // }
-
     public function index()
     {
-        $bookmark = Bookmark::where('id_user', $this->id_user)->get();
+        $bookmark = Bookmark::where('id_user', auth()->user()->id)->get();
         foreach ($bookmark as $dataID) {
             $id[] = $dataID->id_announces;
         }
-        $announces = Announces::find($id);
-        foreach ($announces as $data) {
-            $getImage = Image_announces::where('announcement_id', $data->id)->get();
-            foreach($getImage as $dataImage){
-                $dataImage->image_name = url("/image/{$dataImage->image_name}");
+        $announces = empty($id) ? Bookmark::where('id_user', auth()->user()->id)->paginate(28) : Announces::whereIn('id', $id)->paginate(28);
+        if(!empty($id)){
+            foreach ($announces as $data) {
+                $getImage = Image_announces::where('announcement_id', $data->id)->get();
+                foreach ($getImage as $dataImage) {
+                    $dataImage->image_name = url("/image/{$dataImage->image_name}");
+                }
+                $data->price = number_format($data->price);
+                $data->image =  $getImage;
             }
-            $data->price = number_format($data->price);
-            $data->image =  $getImage;
         }
         return response()->json($announces, 200);
     }
@@ -67,7 +53,7 @@ class BookmarkController extends Controller
         }
 
         $bookmark = new Bookmark;
-        $bookmark->id_user = $this->id_user;
+        $bookmark->id_user = auth()->user()->id;
         $bookmark->id_announces = $request->id_announces;
         $bookmark->save();
 
@@ -92,11 +78,20 @@ class BookmarkController extends Controller
         //
     }
 
-
     public function destroy($id)
     {
-        $bookmark = Bookmark::where('id_user', $this->id_user)
+        $bookmark = Bookmark::where('id_user', auth()->user()->id)
             ->where('id_announces', $id)->delete();
         return response()->json(null, 204);
+    }
+
+    public function getId()
+    {
+        $bookmark = Bookmark::where('id_user', auth()->user()->id)->get();
+        foreach ($bookmark as $dataID) {
+            $id[] = $dataID->id_announces;
+        }
+        $result = empty($id) ? [] : $id ;
+        return response()->json($result, 200);
     }
 }

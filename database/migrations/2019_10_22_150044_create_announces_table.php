@@ -25,7 +25,7 @@ class CreateAnnouncesTable extends Migration
             $table->integer('amphoe_code');
             $table->integer('district_code');
             $table->string('topic');
-            $table->string('detail');
+            $table->text('detail');
             $table->integer('bedroom');
             $table->integer('toilet');
             $table->integer('floor');

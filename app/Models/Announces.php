@@ -25,7 +25,8 @@ class Announces extends Model
         'floor',
         'area',
         'price',
-        'id_user'
+        'id_user',
+        'status'
     ];
     
     public function images()
